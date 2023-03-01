@@ -56,8 +56,8 @@ export const Banner = () => {
               {({ isVisible }) =>
               <div className={isVisible ? "animate__animated animate__fadeIn" : ""}>
                 <h1>Welcome to AI </h1>
-                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                  <button onClick={() => console.log('connect')}>View services <ArrowRightCircle size={25} /></button>
+                  <p>This website is powered by OpenAI API to allow usage of its services like Text generation and Image generation by Dalle-2. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                  <a href="#services"><button>View services <ArrowRightCircle size={25} /></button></a>
               </div>}
             </TrackVisibility>
           </Col>

@@ -17,12 +17,19 @@ export const Projects = () => {
   async function getTextData(e) {
     setButtonText("Sending...");
     setTextPrompt(textPrompt);
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: textPrompt,
-    })
-    setButtonText("Submit");
-    setTextOutput(response.data.choices[0].text)
+    try{
+      const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: textPrompt,
+      })
+      setTextOutput(response.data.choices[0].text)
+    }
+    catch (e) {
+      setTextStatus(false)
+    }
+    finally{
+      setButtonText("Submit");
+    }
   }
   async function getImageData(e) {
     setButtonText("Sending...");
@@ -35,6 +42,9 @@ export const Projects = () => {
       })
       setImageOutput(response.data.data)
     }
+    catch (e) {
+      setImageStatus(false);
+    }
     finally{
       setButtonText("Submit");
     }
@@ -43,8 +53,10 @@ export const Projects = () => {
   const [buttonText, setButtonText] = useState('Submit');
   const [textPrompt, setTextPrompt] = useState("");
   const [imagePrompt, setImagePrompt] = useState("");
-  const [textOutput, setTextOutput] = useState("Nothing here .....");
+  const [textOutput, setTextOutput] = useState("");
   const [imageOutput, setImageOutput] = useState([]);
+  const [textStatus, setTextStatus] = useState(true);
+  const [imageStatus, setImageStatus] = useState(true);
   
   return (
     <section className="project" id="project">
@@ -70,17 +82,18 @@ export const Projects = () => {
                       <div className="col-12">
                         <div className="d-flex justify-content-center">
                           <div className="col-8 new-email-bx">
-                            <input type="email" placeholder="Describe the image you want to generate" onChange={(e) => setImagePrompt(e.target.value)}/>
+                            <input type="text" placeholder="Describe the image you want to generate" onChange={(e) => setImagePrompt(e.target.value)}/>
                             <button disabled={buttonText != "Submit"} onClick={getImageData} type="button">{buttonText}</button>
                           </div>
                         </div>
                       </div>
                       <div className="p-4">
+                        <p>{!imageStatus ? "Something went Wrong. Please try again later":""}</p>
                         <Row>
                           {
                             imageOutput.map((img) => {
-                              <ProjectCard imgUrl={img.url}/>
-                            })
+                              return (<ProjectCard imgUrl={img.url}/>)
+                            })  
                           }
                         </Row>
                       </div>
@@ -90,10 +103,11 @@ export const Projects = () => {
                       <div className="col-12">
                         <div className="d-flex justify-content-center">
                           <div className="col-8 new-email-bx">
-                            <input type="email" placeholder="Ask your questions or write your text halfway" onChange={(e) => setTextPrompt(e.target.value)}/>
+                            <input type="text" placeholder="Ask your questions or write your text halfway" onChange={(e) => setTextPrompt(e.target.value)}/>
                             <button disabled={buttonText != "Submit"} type="button" onClick={getTextData}>{buttonText}</button>
                           </div>
                         </div>
+                        <p>{!textStatus ? "Something went Wrong. Please try again later":""}</p>
                         <div className="d-flex justify-content-center">
                           <pre style={{fontSize:18}} className="p-4">{textOutput}</pre>
                         </div>
